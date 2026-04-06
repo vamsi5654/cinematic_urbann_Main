@@ -165,14 +165,17 @@ export default function AdminVideo() {
       let successCount = 0;
       let failCount = 0;
 
+      console.log(`📤 Starting upload of ${totalFiles} files to category: ${imageUploadForm.category}`);
+
       // Upload each file
       for (let i = 0; i < totalFiles; i++) {
         const file = imageUploadForm.files[i];
+        console.log(`\n🔄 Uploading file ${i + 1}/${totalFiles}: ${file.name}`);
         
         // Validate file
         const validation = validateImageFile(file);
         if (!validation.valid) {
-          console.warn(`Skipping ${file.name}: ${validation.error}`);
+          console.warn(`⚠️ Skipping ${file.name}: ${validation.error}`);
           failCount++;
           continue;
         }
@@ -194,6 +197,8 @@ export default function AdminVideo() {
             throw new Error(uploadResult.error || 'Upload failed');
           }
 
+          console.log(`✅ File uploaded successfully: ${uploadResult.fileName}`);
+
           // Save metadata to database
           await imageApi.createImage({
             imageUrl: uploadResult.imageUrl,
@@ -203,9 +208,10 @@ export default function AdminVideo() {
             fileSize: uploadResult.fileSize,
           });
 
+          console.log(`💾 Metadata saved to database`);
           successCount++;
         } catch (err) {
-          console.error(`Error uploading ${file.name}:`, err);
+          console.error(`❌ Error uploading ${file.name}:`, err);
           failCount++;
         }
       }
@@ -213,6 +219,7 @@ export default function AdminVideo() {
       setUploadProgress(100);
 
       // Show result
+      console.log(`\n📊 Upload complete: ${successCount} succeeded, ${failCount} failed`);
       if (successCount > 0 && failCount === 0) {
         alert(`✅ Successfully uploaded ${successCount} image(s)!`);
       } else if (successCount > 0 && failCount > 0) {
@@ -342,6 +349,7 @@ export default function AdminVideo() {
             className={`${styles.tab} ${activeTab === 'contacts' ? styles.activeTab : ''}`}
             onClick={() => setActiveTab('contacts')}
           >
+            <Mail size={18} />
             Contacts
           </button>
         </div>
@@ -623,7 +631,7 @@ export default function AdminVideo() {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className={styles.modalHeader}>
-                  <h2>Add New Image</h2>
+                  <h2>Add New Images</h2>
                   <button
                     className={styles.closeButton}
                     onClick={() => setShowImageUploadModal(false)}
@@ -723,6 +731,7 @@ export default function AdminVideo() {
                       type="button"
                       variant="ghost"
                       onClick={() => setShowImageUploadModal(false)}
+                      disabled={isUploading}
                     >
                       Cancel
                     </Button>
@@ -731,7 +740,7 @@ export default function AdminVideo() {
                       disabled={isUploading || !imageUploadForm.files.length || !imageUploadForm.category}
                       icon={<Upload size={20} />}
                     >
-                      {isUploading ? 'Adding...' : 'Add Image'}
+                      {isUploading ? `Uploading... ${uploadProgress}%` : `Upload ${imageUploadForm.files.length > 0 ? imageUploadForm.files.length : ''} Image${imageUploadForm.files.length > 1 ? 's' : ''}`}
                     </Button>
                   </div>
                 </form>

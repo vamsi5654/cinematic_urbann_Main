@@ -39,6 +39,6 @@ watch_dirs = ["src", "pages", "components"]
 [build.upload]
 format = "service-worker"
 
+
 [env.production]
 ALLOWED_ORIGINS = "http://127.0.0.1:8788,https://your-project.vercel.app"
-```

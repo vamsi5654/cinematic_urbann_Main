@@ -5,6 +5,7 @@ import { ArrowLeft, MapPin, Calendar, Ruler } from 'lucide-react';
 import { Button } from '../components/Button';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import * as api from '../src/services/api';
+import { getImages } from '../src/services/imageApi';
 import styles from './ProjectDetail.module.css';
 
 export default function ProjectDetail() {
@@ -26,7 +27,8 @@ export default function ProjectDetail() {
     try {
       setLoading(true);
       setError(null);
-      const projectData = await api.getProjectById(id);
+      const images = await getImages();
+      const project = images.find(img => img.id === id) || null;
       setProject(projectData);
     } catch (err) {
       console.error('Error loading project:', err);
