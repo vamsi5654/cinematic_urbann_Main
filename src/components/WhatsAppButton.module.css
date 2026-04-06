@@ -1,0 +1,177 @@
+/* ============================================
+   WhatsApp Floating Button Styles
+   ============================================ */
+
+.whatsappContainer {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999; /* Above everything else */
+}
+
+.whatsappButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #25D366; /* WhatsApp brand green */
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideIn 0.5s ease-out, pulse 2s infinite 2s;
+}
+
+.whatsappButton:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+  background: #20BA5A; /* Slightly darker on hover */
+}
+
+.whatsappButton:active {
+  transform: scale(0.95);
+}
+
+.whatsappIcon {
+  color: white;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+/* Tooltip that appears on hover */
+.tooltip {
+  position: absolute;
+  right: 70px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.whatsappButton:hover .tooltip {
+  opacity: 1;
+}
+
+/* Arrow pointing to button */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid rgba(0, 0, 0, 0.85);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+/* Slide in from bottom-right */
+@keyframes slideIn {
+  from {
+    transform: translate(100px, 100px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+/* Subtle pulse animation */
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.6);
+  }
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .whatsappContainer {
+    bottom: 18px;
+    right: 18px;
+  }
+
+  .whatsappButton {
+    width: 55px;
+    height: 55px;
+  }
+
+  .whatsappIcon {
+    width: 26px;
+    height: 26px;
+  }
+
+  /* Hide tooltip on tablet/mobile (takes up too much space) */
+  .tooltip {
+    display: none;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .whatsappContainer {
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .whatsappButton {
+    width: 50px;
+    height: 50px;
+  }
+
+  .whatsappIcon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* ============================================
+   Accessibility
+   ============================================ */
+
+/* Focus state for keyboard navigation */
+.whatsappButton:focus {
+  outline: 3px solid rgba(37, 211, 102, 0.5);
+  outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .whatsappButton {
+    animation: none;
+    transition: none;
+  }
+  
+  .whatsappButton:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .whatsappButton {
+    border: 2px solid white;
+  }
+}

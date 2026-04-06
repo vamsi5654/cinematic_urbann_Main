@@ -1,0 +1,154 @@
+═══════════════════════════════════════════════════════════════
+   THE URBANN - SETUP CHECKLIST ✅
+═══════════════════════════════════════════════════════════════
+
+Follow this checklist to get your website online in 5 minutes!
+
+═══════════════════════════════════════════════════════════════
+   📋 SETUP STEPS
+═══════════════════════════════════════════════════════════════
+
+[ ] 1. Run: npm install
+      → Installs Supabase and all packages
+
+[ ] 2. Create Supabase account
+      → Go to: https://supabase.com
+      → Sign up (free)
+
+[ ] 3. Create Supabase project
+      → Click "New Project"
+      → Name it: the-urbann
+      → Save password!
+      → Wait 2 minutes for setup
+
+[ ] 4. Get API keys
+      → Settings → API
+      → Copy "Project URL"
+      → Copy "anon public key"
+
+[ ] 5. Create .env file
+      → In project root folder
+      → Add:
+        VITE_SUPABASE_URL=your-url-here
+        VITE_SUPABASE_ANON_KEY=your-key-here
+
+[ ] 6. Run database migration
+      → Supabase Dashboard → SQL Editor
+      → Copy ALL code from: database/supabase-migration.sql
+      → Paste in SQL Editor
+      → Click "Run"
+      → Should see: "Success. No rows returned"
+
+[ ] 7. Create admin user
+      → Supabase → Authentication → Users
+      → Click "Add user" → "Create new user"
+      → Email: admin@theurbann.com
+      → Password: (your choice)
+      → ✅ Check "Auto Confirm User"
+      → Click "Create user"
+      → SAVE THESE CREDENTIALS!
+
+[ ] 8. Test locally
+      → Run: npm start
+      → Opens: http://localhost:3000
+
+[ ] 9. Test gallery
+      → Go to: /gallery
+      → Should see 3 sample videos
+      → Try category filters
+
+[ ] 10. Test admin
+       → Go to: /admin
+       → Login with credentials from step 7
+       → Try adding a video:
+         - Category: Kitchen
+         - URL: https://www.youtube.com/watch?v=zNTaVTMoNTE
+         - Title: Modern Kitchen
+       → Check gallery - video should appear!
+
+═══════════════════════════════════════════════════════════════
+   🚀 DEPLOYMENT
+═══════════════════════════════════════════════════════════════
+
+[ ] 11. Choose hosting:
+        → Option A: Vercel (recommended)
+        → Option B: Netlify
+        → Option C: Cloudflare Pages
+
+[ ] 12. Deploy to Vercel:
+        → Go to: https://vercel.com
+        → Click "Import Project"
+        → Connect GitHub or upload folder
+        → Add environment variables:
+          - VITE_SUPABASE_URL
+          - VITE_SUPABASE_ANON_KEY
+        → Click "Deploy"
+        → Wait 2 minutes
+        → Your site is LIVE! 🎉
+
+═══════════════════════════════════════════════════════════════
+   ✅ VERIFICATION
+═══════════════════════════════════════════════════════════════
+
+Test your live site:
+
+[ ] Gallery page loads
+[ ] Videos are visible
+[ ] Videos autoplay when scrolled
+[ ] Category filters work
+[ ] Admin login works
+[ ] Can add new videos
+[ ] New videos appear in gallery
+[ ] Contact form works
+[ ] Mobile responsive
+[ ] No console errors
+
+═══════════════════════════════════════════════════════════════
+   🎬 ADD YOUR VIDEOS
+═══════════════════════════════════════════════════════════════
+
+[ ] Remove sample videos (if desired)
+[ ] Add 10-20 of your project videos
+[ ] Organize by categories
+[ ] Add descriptive titles
+
+Find videos on YouTube for:
+→ Kitchen designs
+→ Living room projects
+→ Bedroom makeovers
+→ Full home renovations
+
+═══════════════════════════════════════════════════════════════
+   📱 SHARE YOUR WEBSITE
+═══════════════════════════════════════════════════════════════
+
+[ ] Share URL with team
+[ ] Add to business cards
+[ ] Update email signature
+[ ] Post on social media
+[ ] Add to portfolio sites
+[ ] Tell clients!
+
+═══════════════════════════════════════════════════════════════
+   🆘 PROBLEMS?
+═══════════════════════════════════════════════════════════════
+
+Check these files for help:
+
+→ START_HERE.md (simple guide)
+→ SETUP_GUIDE.md (detailed guide)
+→ QUICK_START.md (quick reference)
+→ FINAL_SUMMARY.md (complete summary)
+
+Or check browser console (F12 → Console) for error messages.
+
+═══════════════════════════════════════════════════════════════
+   ✨ YOU'RE DONE!
+═══════════════════════════════════════════════════════════════
+
+When all boxes are checked above, your beautiful interior design
+website is live and ready for clients!
+
+Congratulations! 🎊
+
+═══════════════════════════════════════════════════════════════
