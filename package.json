@@ -4,7 +4,7 @@
   "description": "The Urbann - Premium Interior Design Studio Website",
   "type": "module",
   "engines": {
-  "node": "24.x"
+  "node": "24"
 }
   "scripts": {
     "start": "vite",
