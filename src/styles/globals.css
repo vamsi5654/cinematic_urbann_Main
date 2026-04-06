@@ -1,5 +1,9 @@
 /* The Urbann — Global Styles & Design System */
 
+
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
 :root {
   /* Color Palette */
   --color-charcoal: #0F1113;
@@ -143,6 +147,3 @@ img {
   mix-blend-mode: overlay;
   opacity: 0.5;
 }
-
-/* Google Fonts Import */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
