@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'motion/react';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from "framer-motion"
 import { Play } from 'lucide-react';
 import { VideoItem, ImageItem } from '../types';
 import * as api from '../src/services/api';

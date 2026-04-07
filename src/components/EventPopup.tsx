@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from "framer-motion"
 import { X } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import * as api from '../src/services/api';

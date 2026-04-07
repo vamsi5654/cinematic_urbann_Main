@@ -1,6 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion } from "framer-motion"
 import { Home, Building2, PaintBucket, Lightbulb, Hammer, Eye } from 'lucide-react';
 import { Button } from '../components/Button';
 import styles from './Services.module.css';

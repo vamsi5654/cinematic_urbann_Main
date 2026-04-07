@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import {  useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform } from "framer-motion"
 import { Sparkles, Compass, Heart, ArrowRight } from 'lucide-react';
 import { Button } from '../components/Button';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';

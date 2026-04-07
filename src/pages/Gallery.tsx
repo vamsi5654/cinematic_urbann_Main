@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { Search, MapPin, Calendar, Play } from 'lucide-react';
+import { motion } from "framer-motion"
+import { MapPin, Calendar, Play } from 'lucide-react';
 import { Button } from '../components/Button';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { Project } from '../types';

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from "framer-motion"
 import { Upload, Search, Edit, Trash2, X, Eye, Image as ImageIcon, LogOut, Calendar, Mail, Plus, Check, CheckCircle, ChevronDown } from 'lucide-react';
 import { Button } from '../components/Button';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';

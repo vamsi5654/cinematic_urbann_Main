@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion } from "framer-motion"
 import { ArrowLeft, MapPin, Calendar, Ruler } from 'lucide-react';
 import { Button } from '../components/Button';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
-import * as api from '../src/services/api';
+//import * as api from '../src/services/api';
 import { getImages } from '../src/services/imageApi';
 import styles from './ProjectDetail.module.css';
 
