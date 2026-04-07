@@ -4,11 +4,11 @@
   "description": "The Urbann - Premium Interior Design Studio Website",
   "type": "module",
   "engines": {
-    "node": "18.x"
+    "node": "24.x"
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "node node_modules/vite/bin/vite.js build",
     "preview": "vite preview",
     "deploy": "npm run build && wrangler pages deploy dist",
     "dev:api": "wrangler dev",
