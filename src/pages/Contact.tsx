@@ -135,6 +135,7 @@ export default function Contact() {
                 <h3>Call Us</h3>
                 <p>
                   <a href="tel:+918977978321">+91 8977978321</a>
+                  <a href="tel:+918977978321">+91 7022987826</a>
                 </p>
               </div>
             </div>
