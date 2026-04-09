@@ -13,7 +13,7 @@ export function Topbar() {
           </a>
           <a href="mailto:hello@theurbann.com" className={styles.contactItem}>
             <Mail size={14} />
-            <span>hello@theurbann.com</span>
+            <span>urbann2009@gmail.com</span>
           </a>
         </div>
         

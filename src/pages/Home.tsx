@@ -57,12 +57,13 @@ export default function Home() {
     <div className={styles.home}>
       {/* Hero Section */}
       <section className={`${styles.hero} film-grain`} ref={heroRef}>
-       <div className={styles.heroBackground}>
+      <div className={styles.heroBackground}>
   <iframe
-    src="https://www.youtube.com/embed/ZtpNjag1bjE?autoplay=1&mute=1&loop=1&playlist=ZtpNjag1bjE"
+    src="https://www.youtube.com/embed/ZtpNjag1bjE?autoplay=1&mute=1&loop=1&playlist=ZtpNjag1bjE&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1"
     frameBorder="0"
     allow="autoplay; fullscreen"
     className={styles.heroVideo}
+    style={{ pointerEvents: 'none' }}
   ></iframe>
 </div>
         <div className={styles.heroOverlay}></div>

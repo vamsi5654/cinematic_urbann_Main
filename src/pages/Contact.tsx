@@ -146,7 +146,7 @@ export default function Contact() {
               <div className={styles.infoText}>
                 <h3>Email Us</h3>
                 <p>
-                  <a href="mailto:hello@theurbann.com">hello@theurbann.com</a>
+                  <a href="mailto:hello@theurbann.com">urbann2009@gmail.com</a>
                 </p>
               </div>
             </div>
