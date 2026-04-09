@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Facebook, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { Instagram, Facebook, Youtube, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 import styles from './Footer.module.css';
 
 export function Footer() {
@@ -46,16 +46,24 @@ export function Footer() {
               Urbann2009@gmail.com
             </p>
             <div className={styles.socialLinks}>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-                <Instagram size={18} />
-              </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-                <Facebook size={18} />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-                <Linkedin size={18} />
-              </a>
-            </div>
+          <a href="https://www.instagram.com/reel/DWEKWNhkvi9/?igsh=aDZjc3M4cXgwdDZk" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+            <Instagram size={18} />
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+            <Facebook size={18} />
+          </a>
+          {/*<a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+            <Linkedin size={16} />
+          </a>*/}
+          <a
+            href="https://www.youtube.com/@UrbannInteriors"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.socialLink}
+          >
+            <Youtube size={18} />
+          </a>
+        </div>
           </div>
         </div>
 

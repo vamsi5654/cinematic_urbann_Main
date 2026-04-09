@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion"
-import { MapPin, Phone, Mail, Clock, Instagram, Facebook, Linkedin } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Instagram, Facebook, Youtube, Linkedin } from 'lucide-react';
 import { Button } from '../components/Button';
 import * as api from '../src/services/api';
 import styles from './Contact.module.css';
@@ -167,16 +167,24 @@ export default function Contact() {
             </div>
 
             <div className={styles.socialLinks}>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-                <Instagram size={20} />
-              </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-                <Facebook size={20} />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-                <Linkedin size={20} />
-              </a>
-            </div>
+          <a href="https://www.instagram.com/reel/DWEKWNhkvi9/?igsh=aDZjc3M4cXgwdDZk" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+            <Instagram size={20} />
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+            <Facebook size={20} />
+          </a>
+          {/*<a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
+            <Linkedin size={16} />
+          </a>*/}
+          <a
+            href="https://www.youtube.com/@UrbannInteriors"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.socialLink}
+          >
+            <Youtube size={20} />
+          </a>
+        </div>
           </div>
 
           <div className={styles.formWrapper}>
