@@ -102,6 +102,54 @@
   }
 }
 
+
+.optionsMenu {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  min-width: 220px;
+  animation: slideUp 0.2s ease;
+}
+
+.menuHeader {
+  padding: 12px 16px;
+  background: #25D366;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.optionButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.optionButton:hover {
+  background: rgba(37, 211, 102, 0.15);
+}
+
+.optionButton:last-child {
+  border-bottom: none;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 /* ============================================
    Responsive Design
    ============================================ */
