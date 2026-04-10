@@ -331,13 +331,158 @@
   @media (max-width: 968px) {
     .contact {
       padding-top: 160px;
+      padding-bottom: var(--space-xl);
+    }
+    
+    .header {
+      margin-bottom: var(--space-xl);
+    }
+
+    .header h1 {
+      font-size: clamp(32px, 8vw, 48px);
+    }
+
+    .header p {
+      font-size: 16px;
+      padding: 0 var(--space-md);
     }
     
     .content {
       grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+
+    .info {
+      padding: var(--space-lg);
+    }
+
+    .info h2 {
+      font-size: 24px;
+    }
+
+    .infoItem {
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .infoIcon {
+      width: 40px;
+      height: 40px;
+    }
+
+    .socialLinks {
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+    }
+
+    .socialLink {
+      width: 44px;
+      height: 44px;
+    }
+
+    .formWrapper {
+      padding: var(--space-lg);
+    }
+
+    .formWrapper h2 {
+      font-size: 24px;
+    }
+
+    .formWrapper p {
+      font-size: 15px;
+      margin-bottom: var(--space-md);
     }
     
     .formRow {
       grid-template-columns: 1fr;
+      gap: var(--space-md);
+    }
+
+    .formGroup input,
+    .formGroup select,
+    .formGroup textarea {
+      padding: 12px 14px;
+      font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    .formGroup textarea {
+      min-height: 120px;
+    }
+
+    .captchaDisplay {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      padding: 16px;
+    }
+
+    .captchaLabel {
+      text-align: center;
+    }
+
+    .captchaCode {
+      font-size: 24px;
+      letter-spacing: 0.2em;
+      padding: 10px 16px;
+    }
+
+    .captchaRefresh {
+      align-self: center;
+    }
+
+    .submitButton {
+      margin-top: var(--space-sm);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .contact {
+      padding-top: 140px;
+    }
+
+    .header {
+      margin-bottom: var(--space-lg);
+    }
+
+    .header h1 {
+      font-size: 32px;
+    }
+
+    .header p {
+      font-size: 15px;
+    }
+
+    .info {
+      padding: var(--space-md);
+    }
+
+    .info h2 {
+      font-size: 20px;
+      margin-bottom: var(--space-md);
+    }
+
+    .infoText h3 {
+      font-size: 14px;
+    }
+
+    .infoText p {
+      font-size: 14px;
+    }
+
+    .formWrapper {
+      padding: var(--space-md);
+    }
+
+    .formWrapper h2 {
+      font-size: 20px;
+    }
+
+    .formWrapper p {
+      font-size: 14px;
+    }
+
+    .captchaCode {
+      font-size: 20px;
+      padding: 8px 12px;
     }
   }

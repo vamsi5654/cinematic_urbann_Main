@@ -29,6 +29,9 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+  /* Ensure video covers on all devices */
+  min-width: 100%;
+  min-height: 100%;
 }
 
 .heroOverlay {
@@ -37,7 +40,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  /*background: radial-gradient(ellipse at center, rgba(15, 17, 19, 0.5) 0%, rgba(15, 17, 19, 0.85) 100%);*/
+  background: radial-gradient(ellipse at center, rgba(15, 17, 19, 0.5) 0%, rgba(15, 17, 19, 0.85) 100%);
   z-index: 2;
 }
 
@@ -344,11 +347,52 @@
 
 @media (max-width: 768px) {
   .hero {
-    height: 80vh;
+    height: 100vh; /* Keep full height on mobile */
+    min-height: -webkit-fill-available; /* iOS Safari fix */
+  }
+
+  .heroBackground {
+    /* Ensure background covers on mobile */
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .heroVideo {
+    /* Better mobile video coverage */
+    width: 100vw;
+    height: 100vh;
+    min-width: 100vw;
+    min-height: 100vh;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .heroContent {
+    padding: 0 var(--space-lg);
+  }
+
+  .heroTagline {
+    font-size: 14px;
+  }
+
+  .heroTitle {
+    font-size: clamp(24px, 7vw, 36px);
+  }
+
+  .heroSubtitle {
+    font-size: clamp(14px, 3.5vw, 16px);
+    margin-bottom: var(--space-lg);
   }
   
   .heroActions {
     flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .heroActions a {
+    width: 100%;
+    max-width: 300px;
   }
   
   .featureGrid,
@@ -358,5 +402,35 @@
   
   .projectCard {
     aspect-ratio: 3/2;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for better mobile support */
+  }
+
+  .heroVideo {
+    /* Even more aggressive coverage on small phones */
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    min-width: 100vw;
+    min-height: 100vh;
+    transform: scale(1.05); /* Slight zoom to avoid edge gaps */
+  }
+
+  .heroContent {
+    padding: 0 var(--space-md);
+  }
+
+  .heroTitle {
+    font-size: 28px;
+    line-height: 1.3;
+  }
+
+  .heroSubtitle {
+    font-size: 14px;
   }
 }
