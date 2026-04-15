@@ -1,4 +1,7 @@
 /* Homepage Styles */
+:root {
+  --nav-height: 70px;
+}
 
 .home {
   min-height: 100vh;
@@ -13,6 +16,7 @@
   justify-content: center;
   overflow: hidden;
   margin-top: 0;
+  padding-top: var(--nav-height);
 }
 
 .heroBackground {
@@ -374,7 +378,7 @@
 
   .heroTagline {
     font-size: 14px;
-    margin-top: 80px;
+  
   }
 
   .heroTitle {
