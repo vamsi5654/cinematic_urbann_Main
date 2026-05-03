@@ -2,44 +2,33 @@
  * ================================================================
  * CLOUDFLARE R2 UPLOAD SERVICE
  * ================================================================
- * Handles image uploads to Cloudflare R2 Storage
- * 
- * Features:
- * - Client-side image compression before upload
- * - WebP conversion for smaller file sizes
- * - Image resizing (max 2000px width)
- * - Progress tracking
- * - Error handling
+ * Uploads images via the Cloudflare Worker (/api/upload-image)
+ * which stores the file in R2 and returns a public URL.
+ *
+ * The Worker URL comes from VITE_WORKER_URL in .env.local
  * ================================================================
  */
 
 import { v4 as uuidv4 } from 'uuid';
 
 // ================================================================
-// CONFIGURATION (from .env.local)
+// CONFIGURATION
 // ================================================================
-const R2_CONFIG = {
-  accountId: import.meta.env.VITE_CLOUDFLARE_ACCOUNT_ID,
-  bucketName: import.meta.env.VITE_R2_BUCKET_NAME,
-  accessKeyId: import.meta.env.VITE_R2_ACCESS_KEY_ID,
-  secretAccessKey: import.meta.env.VITE_R2_SECRET_ACCESS_KEY,
-  publicUrl: import.meta.env.VITE_R2_PUBLIC_URL,
-};
+const WORKER_URL = import.meta.env.VITE_WORKER_URL as string;
+const R2_PUBLIC_URL = import.meta.env.VITE_R2_PUBLIC_URL as string;
 
-// Validate configuration
-if (!R2_CONFIG.accountId || !R2_CONFIG.bucketName || !R2_CONFIG.accessKeyId || !R2_CONFIG.secretAccessKey) {
-  console.warn('⚠️ Cloudflare R2 credentials not found in .env.local. Using mock mode.');
+if (!WORKER_URL) {
+  console.warn('⚠️ VITE_WORKER_URL not set in .env.local — uploads will fail.');
 }
 
 // ================================================================
 // IMAGE COMPRESSION SETTINGS
 // ================================================================
 const COMPRESSION_SETTINGS = {
-  maxWidth: 2000,           // Maximum width in pixels
-  maxHeight: 2000,          // Maximum height in pixels
-  quality: 0.85,            // JPEG/WebP quality (0-1)
-  format: 'image/webp',     // Convert to WebP for better compression
-  maxSizeMB: 2,             // Maximum file size in MB
+  maxWidth: 2000,
+  maxHeight: 2000,
+  quality: 0.85,
+  format: 'image/webp' as const,
 };
 
 // ================================================================
@@ -60,11 +49,8 @@ export interface UploadResult {
 }
 
 // ================================================================
-// IMAGE COMPRESSION FUNCTION
+// IMAGE COMPRESSION
 // ================================================================
-/**
- * Compress and resize image before upload
- */
 async function compressImage(file: File): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -77,31 +63,27 @@ async function compressImage(file: File): Promise<Blob> {
     }
 
     img.onload = () => {
-      // Calculate new dimensions (maintain aspect ratio)
       let { width, height } = img;
-      
+
       if (width > COMPRESSION_SETTINGS.maxWidth) {
         height = (height * COMPRESSION_SETTINGS.maxWidth) / width;
         width = COMPRESSION_SETTINGS.maxWidth;
       }
-      
       if (height > COMPRESSION_SETTINGS.maxHeight) {
         width = (width * COMPRESSION_SETTINGS.maxHeight) / height;
         height = COMPRESSION_SETTINGS.maxHeight;
       }
 
-      // Set canvas size
       canvas.width = width;
       canvas.height = height;
-
-      // Draw and compress image
       ctx.drawImage(img, 0, 0, width, height);
 
-      // Convert to blob
       canvas.toBlob(
         (blob) => {
           if (blob) {
-            console.log(`📦 Compressed: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(blob.size / 1024 / 1024).toFixed(2)}MB`);
+            console.log(
+              `📦 Compressed: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(blob.size / 1024 / 1024).toFixed(2)}MB`
+            );
             resolve(blob);
           } else {
             reject(new Error('Image compression failed'));
@@ -112,21 +94,14 @@ async function compressImage(file: File): Promise<Blob> {
       );
     };
 
-    img.onerror = () => {
-      reject(new Error('Failed to load image'));
-    };
-
-    // Load image
+    img.onerror = () => reject(new Error('Failed to load image'));
     img.src = URL.createObjectURL(file);
   });
 }
 
 // ================================================================
-// UPLOAD TO R2 FUNCTION
+// MAIN UPLOAD FUNCTION
 // ================================================================
-/**
- * Upload image to Cloudflare R2
- */
 export async function uploadImageToR2(
   file: File,
   category: string,
@@ -135,84 +110,60 @@ export async function uploadImageToR2(
   try {
     console.log(`📤 Starting upload: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
 
+    if (!WORKER_URL) {
+      throw new Error('VITE_WORKER_URL is not set in your .env.local file.');
+    }
+
     // Step 1: Compress image
-    if (onProgress) onProgress({ percent: 10, loaded: 0, total: 100 });
-    
+    if (onProgress) onProgress({ percent: 10, loaded: 10, total: 100 });
     const compressedBlob = await compressImage(file);
-    const compressedFile = new File([compressedBlob], file.name, { 
-      type: COMPRESSION_SETTINGS.format 
+    const uniqueFileName = `${category}/${uuidv4()}.webp`;
+    const compressedFile = new File([compressedBlob], uniqueFileName, {
+      type: COMPRESSION_SETTINGS.format,
     });
+
+    console.log(`📁 Category: ${category}`);
+    console.log(`📄 File: ${uniqueFileName} (${(compressedFile.size / 1024).toFixed(0)} KB)`);
 
     if (onProgress) onProgress({ percent: 30, loaded: 30, total: 100 });
 
-    // Step 2: Generate unique filename
-    const fileExtension = 'webp'; // Always WebP after compression
-    const uniqueFileName = `${category}/${uuidv4()}.${fileExtension}`;
-
-    // Step 3: Check if credentials are available
-    if (!R2_CONFIG.accessKeyId || !R2_CONFIG.secretAccessKey) {
-      // MOCK MODE: Simulate upload for development without credentials
-      console.log('🧪 Mock mode: Simulating upload...');
-      console.log('📁 Category:', category);
-      console.log('📄 File:', file.name, '(', (file.size / 1024).toFixed(0), 'KB)');
-      
-      if (onProgress) {
-        for (let i = 30; i <= 100; i += 10) {
-          await new Promise(resolve => setTimeout(resolve, 100));
-          onProgress({ percent: i, loaded: i, total: 100 });
-        }
-      }
-
-      // Return mock URL (using base64 for preview)
-      const reader = new FileReader();
-      return new Promise((resolve) => {
-        reader.onloadend = () => {
-          const base64Url = reader.result as string;
-          console.log('✅ Mock upload complete - Base64 length:', base64Url.length);
-          resolve({
-            success: true,
-            imageUrl: base64Url, // Base64 data URL for preview
-            fileName: uniqueFileName,
-            fileSize: compressedFile.size,
-          });
-        };
-        reader.readAsDataURL(compressedFile);
-      });
-    }
-
-    // Step 4: Upload to R2 (REAL MODE)
+    // Step 2: Build FormData for the Worker
     const formData = new FormData();
-    formData.append('file', compressedFile);
+    formData.append('file', compressedFile, uniqueFileName);
+    formData.append('category', category);
     formData.append('key', uniqueFileName);
-    formData.append('bucket', R2_CONFIG.bucketName);
 
     if (onProgress) onProgress({ percent: 50, loaded: 50, total: 100 });
 
-    // Upload via your backend API (we'll create this endpoint)
-    const response = await fetch('/api/upload-image', {
+    // Step 3: POST to Cloudflare Worker
+    console.log(`🚀 Uploading to Cloudflare Worker: ${WORKER_URL}/api/upload-image`);
+    const response = await fetch(`${WORKER_URL}/api/upload-image`, {
       method: 'POST',
-      headers: {
-        'X-R2-Access-Key': R2_CONFIG.accessKeyId,
-        'X-R2-Secret-Key': R2_CONFIG.secretAccessKey,
-        'X-R2-Account-Id': R2_CONFIG.accountId,
-      },
       body: formData,
     });
 
     if (onProgress) onProgress({ percent: 90, loaded: 90, total: 100 });
 
     if (!response.ok) {
-      throw new Error(`Upload failed: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`Worker upload failed (${response.status}): ${errorText}`);
     }
 
     const result = await response.json();
 
+    // Step 4: Build the public URL
+    const imageUrl =
+      result.imageUrl ||
+      result.url ||
+      (R2_PUBLIC_URL ? `${R2_PUBLIC_URL}/${uniqueFileName}` : '');
+
+    if (!imageUrl) {
+      throw new Error('No image URL returned from Worker and VITE_R2_PUBLIC_URL is not set.');
+    }
+
     if (onProgress) onProgress({ percent: 100, loaded: 100, total: 100 });
 
-    // Step 5: Return success result
-    const imageUrl = `${R2_CONFIG.publicUrl}/${uniqueFileName}`;
-
-    console.log(`✅ Upload successful: ${imageUrl}`);
+    console.log(`✅ Upload successful → ${imageUrl}`);
 
     return {
       success: true,
@@ -223,7 +174,6 @@ export async function uploadImageToR2(
 
   } catch (error) {
     console.error('❌ Upload error:', error);
-    
     return {
       success: false,
       imageUrl: '',
@@ -235,34 +185,21 @@ export async function uploadImageToR2(
 }
 
 // ================================================================
-// DELETE FROM R2 FUNCTION
+// DELETE FROM R2
 // ================================================================
-/**
- * Delete image from Cloudflare R2
- */
 export async function deleteImageFromR2(fileName: string): Promise<boolean> {
   try {
     console.log(`🗑️ Deleting image: ${fileName}`);
 
-    // Check if credentials are available
-    if (!R2_CONFIG.accessKeyId || !R2_CONFIG.secretAccessKey) {
-      console.log('🧪 Mock mode: Simulating delete...');
-      return true; // Mock success
+    if (!WORKER_URL) {
+      console.warn('⚠️ VITE_WORKER_URL not set — cannot delete from R2.');
+      return false;
     }
 
-    // Delete via backend API
-    const response = await fetch('/api/delete-image', {
+    const response = await fetch(`${WORKER_URL}/api/delete-image`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-R2-Access-Key': R2_CONFIG.accessKeyId,
-        'X-R2-Secret-Key': R2_CONFIG.secretAccessKey,
-        'X-R2-Account-Id': R2_CONFIG.accountId,
-      },
-      body: JSON.stringify({
-        bucket: R2_CONFIG.bucketName,
-        key: fileName,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key: fileName }),
     });
 
     if (!response.ok) {
@@ -279,41 +216,25 @@ export async function deleteImageFromR2(fileName: string): Promise<boolean> {
 }
 
 // ================================================================
-// GET IMAGE URL FUNCTION
+// GET PUBLIC IMAGE URL
 // ================================================================
-/**
- * Get full public URL for an image
- */
 export function getImageUrl(fileName: string): string {
-  if (!R2_CONFIG.publicUrl) {
-    return ''; // No URL in mock mode
-  }
-  return `${R2_CONFIG.publicUrl}/${fileName}`;
+  if (!R2_PUBLIC_URL) return '';
+  return `${R2_PUBLIC_URL}/${fileName}`;
 }
 
 // ================================================================
-// VALIDATE IMAGE FILE FUNCTION
+// VALIDATE IMAGE FILE
 // ================================================================
-/**
- * Validate image file before upload
- */
 export function validateImageFile(file: File): { valid: boolean; error?: string } {
-  // Check file type
   const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
   if (!validTypes.includes(file.type)) {
-    return {
-      valid: false,
-      error: 'Invalid file type. Please upload JPG, PNG, or WebP images.',
-    };
+    return { valid: false, error: 'Invalid file type. Please upload JPG, PNG, or WebP images.' };
   }
 
-  // Check file size (10MB max before compression)
-  const maxSize = 10 * 1024 * 1024; // 10MB
+  const maxSize = 10 * 1024 * 1024;
   if (file.size > maxSize) {
-    return {
-      valid: false,
-      error: 'File too large. Maximum size is 10MB.',
-    };
+    return { valid: false, error: 'File too large. Maximum size is 10MB.' };
   }
 
   return { valid: true };

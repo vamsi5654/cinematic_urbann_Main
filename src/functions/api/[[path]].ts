@@ -48,6 +48,16 @@ export async function onRequest(context: { request: Request; env: Env; params: {
     if (path === 'upload' && request.method === 'POST') {
       return await handleUpload(request, env, headers);
     }
+
+    // New simple R2 upload endpoint (used by r2Upload.ts)
+    if (path === 'upload-image' && request.method === 'POST') {
+      return await handleUploadImage(request, env, headers);
+    }
+
+    // New simple R2 delete endpoint
+    if (path === 'delete-image' && request.method === 'DELETE') {
+      return await handleDeleteImageByKey(request, env, headers);
+    }
     
     if (path === 'images' && request.method === 'GET') {
       return await handleGetImages(request, env, headers);
@@ -884,3 +894,94 @@ async function handleUpdateVideo(videoId: string, request: Request, env: Env, he
     headers: { ...headers, 'Content-Type': 'application/json' },
   });
 }
+// ================================================================
+// HANDLE UPLOAD IMAGE (simple R2 upload — called by r2Upload.ts)
+// ================================================================
+async function handleUploadImage(request: Request, env: Env, headers: Record<string, string>) {
+  try {
+    if (!env.IMAGES_BUCKET) {
+      return new Response(JSON.stringify({ error: 'R2 bucket not configured' }), {
+        status: 500,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const formData = await request.formData();
+    const file = formData.get('file') as File | null;
+    const key = formData.get('key') as string | null;
+
+    if (!file || !key) {
+      return new Response(JSON.stringify({ error: 'Missing file or key' }), {
+        status: 400,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Upload to R2
+    const fileBuffer = await file.arrayBuffer();
+    await env.IMAGES_BUCKET.put(key, fileBuffer, {
+      httpMetadata: { contentType: file.type || 'image/webp' },
+    });
+
+    // Build public URL
+    const bucketUrl = env.R2_PUBLIC_URL || 'https://pub-bb51c92ec25541b7bac2969eeb40169b.r2.dev';
+    const imageUrl = `${bucketUrl}/${key}`;
+
+    console.log('✅ upload-image success:', imageUrl);
+
+    return new Response(JSON.stringify({ success: true, imageUrl, key }), {
+      status: 200,
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    });
+
+  } catch (error) {
+    console.error('upload-image error:', error);
+    return new Response(JSON.stringify({ error: String(error) }), {
+      status: 500,
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    });
+  }
+}
+
+// ================================================================
+// HANDLE DELETE IMAGE BY KEY (called by r2Upload.ts deleteImageFromR2)
+// ================================================================
+async function handleDeleteImageByKey(request: Request, env: Env, headers: Record<string, string>) {
+  try {
+    if (!env.IMAGES_BUCKET) {
+      return new Response(JSON.stringify({ error: 'R2 bucket not configured' }), {
+        status: 500,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const { key } = await request.json() as { key: string };
+
+    if (!key) {
+      return new Response(JSON.stringify({ error: 'Missing key' }), {
+        status: 400,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
+
+    await env.IMAGES_BUCKET.delete(key);
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    });
+
+  } catch (error) {
+    console.error('delete-image error:', error);
+    return new Response(JSON.stringify({ error: String(error) }), {
+      status: 500,
+      headers: { ...headers, 'Content-Type': 'application/json' },
+    });
+  }
+}
+// ES Module default export (required for D1 binding)
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    return onRequest({ request, env, params: { path: [] } });
+  },
+};
