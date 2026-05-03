@@ -13,11 +13,14 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import AdminVideo from './pages/AdminVideo';
 import './styles/globals.css';
+import FloatingLogo from "./components/FloatingLogo";
 
 export default function App() {
   return (
+     
     <Router>
       <div className="app">
+        <FloatingLogo />
         <Topbar />
         <Header />
         <EventPopup />

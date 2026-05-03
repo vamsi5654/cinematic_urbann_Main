@@ -38,7 +38,7 @@ export default function Home() {
   const features = [
     {
       icon: Sparkles,
-      title: 'Cinematic Vision',
+      title: 'Design That Tells a Story',
       description: 'Every space we craft tells a story. From mood lighting to material selection, we design interiors that feel like scenes from your favorite film.'
     },
     {
@@ -72,7 +72,7 @@ export default function Home() {
         <div className={styles.heroContent}>
           <div className={styles.heroTagline}>The Urbann Studio</div>
           <h1 className={styles.heroTitle}>
-            Crafting Cinematic Interiors That Feel Like Home
+            Designing Spaces That Tell Your Story
           </h1>
           <p className={styles.heroSubtitle}>
             Where timeless design meets human warmth. Every detail, every texture, every moment—designed with intention.
