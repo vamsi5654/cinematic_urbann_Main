@@ -232,7 +232,7 @@ export function validateImageFile(file: File): { valid: boolean; error?: string 
     return { valid: false, error: 'Invalid file type. Please upload JPG, PNG, or WebP images.' };
   }
 
-  const maxSize = 10 * 1024 * 1024;
+  const maxSize = 100 * 1024 * 1024;
   if (file.size > maxSize) {
     return { valid: false, error: 'File too large. Maximum size is 10MB.' };
   }
