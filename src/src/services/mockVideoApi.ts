@@ -27,21 +27,21 @@ function getStoredVideos(): VideoItem[] {
   return [
     {
       id: '1',
-      videoId: 'zNTaVTMoNTE',
+      videoId: 'Exkzjuecsxo',
       category: 'Kitchen',
       title: 'Modern Kitchen Transformation',
       createdAt: new Date('2024-03-01'),
     },
     {
       id: '2',
-      videoId: 'Zi_XLOBDo_Y',
+      videoId: 'FBPGHObdWY0',
       category: 'Living',
       title: 'Luxury Living Room Design',
       createdAt: new Date('2024-03-05'),
     },
     {
       id: '3',
-      videoId: 'QORDGN-ly7g',
+      videoId: 'ZtpNjag1bjE',
       category: 'Bedroom',
       title: 'Serene Bedroom Makeover',
       createdAt: new Date('2024-03-10'),
